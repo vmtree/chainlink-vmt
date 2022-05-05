@@ -1,0 +1,13 @@
+# build stuff
+node_modules
+build
+dist
+
+# docker volumes
+data
+
+# sensitive values
+**/*/.env
+
+# error logs
+*.log
