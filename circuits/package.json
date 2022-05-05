@@ -1,0 +1,13 @@
+{
+    "name": "chainlink-vmt-circuits",
+    "version": "0.1.0",
+    "description": "",
+    "main": "hardhat.config.js",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "circom": "^0.5.45",
+        "circomlib": "^0.5.2",
+        "snarkjs": "0.4.6"
+    }
+}

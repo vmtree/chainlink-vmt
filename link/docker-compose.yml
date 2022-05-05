@@ -1,0 +1,24 @@
+services:
+  pg_chainlink:
+    image: postgres
+    container_name: pg_chainlink
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - ./environment/database.env
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data/
+
+  chainlink:
+    image: smartcontract/chainlink:1.3.0
+    restart: always
+    env_file:
+      - ./environment/rinkeby.env
+    depends_on:
+      - pg_chainlink
+    ports:
+      - 6688:6688
+    volumes:
+      - ./data/chainlink:/chainlink/
+    command: node start --password /chainlink/password.txt --api /chainlink/apicredentials.txt
