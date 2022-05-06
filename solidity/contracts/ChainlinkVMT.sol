@@ -45,6 +45,22 @@ contract ChainlinkVMT is UpdateVerifier, MassUpdateVerifier {
         return filledSubtrees[19];
     }
 
+    function checkMassUpdate()
+        external
+        view
+        returns (uint[10] memory, uint[20] memory)
+    {
+        if ((latestIndex - nextIndex) < 10)
+            revert InsufficientInbox();
+        uint[10] memory leaves;
+        for (uint i; i < 10;) {
+            unchecked {
+                leaves[i] = commitments[nextIndex + i++];
+            }
+        }
+        return (leaves, filledSubtrees);
+    }
+
     function getFilledSubtrees() public view returns (uint[20] memory) {
         return filledSubtrees;
     }

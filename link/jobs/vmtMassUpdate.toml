@@ -1,0 +1,35 @@
+type            = "webhook"
+schemaVersion   = 3
+evmChainID      = 4
+name            = "vmtMassUpdate"
+contractAddress = ""
+fromAddress     = "0x554846E877e00664f20865E00934B9A4D78Bc9D9"
+observationSource = """
+encode_check_upkeep_tx   [type="ethabiencode"
+                          abi="checkMassUpdate()"
+                          data=""]
+check_upkeep_tx          [type="ethcall"
+                          failEarly=true
+                          extractRevertReason=true
+                          evmChainID="$(jobSpec.evmChainID)"
+                          contract="$(jobSpec.contractAddress)"
+                          data="$(encode_check_upkeep_tx)"]
+decode_check_upkeep_tx   [type="ethabidecode"
+                          abi="bytes memory performData, uint256 maxLinkPayment, uint256 gasLimit, uint256 adjustedGasWei, uint256 linkEth"]
+calculate_subtrees       [type="bridge"
+                          name="vmtMassUpdate"
+                          requestData="{\\"leaves\\": $(decode_performData.leaves), \\"filledSubtrees\\": $(decode_performData.filledSubtrees)}"]
+encode_perform_upkeep_tx [type="ethabiencode"
+                          abi="performUpkeep(uint256 id, bytes calldata performData)"
+                          data="{\\"id\\": $(jobSpec.upkeepID),\\"performData\\":$(calculate_subtrees.performData)}"]
+perform_upkeep_tx        [type="ethtx"
+                          minConfirmations=0
+                          to="$(jobSpec.contractAddress)"
+                          from="[$(jobSpec.fromAddress)]"
+                          evmChainID="$(jobSpec.evmChainID)"
+                          data="$(encode_perform_upkeep_tx)"
+                          gasLimit="$(jobSpec.performUpkeepGasLimit)"
+                          txMeta="{\\"jobID\\":$(jobSpec.jobID),\\"upkeepID\\":$(jobSpec.upkeepID)}"]
+
+encode_check_upkeep_tx -> check_upkeep_tx -> decode_check_upkeep_tx -> encode_perform_upkeep_tx -> perform_upkeep_tx
+"""
