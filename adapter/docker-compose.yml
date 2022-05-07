@@ -1,0 +1,17 @@
+services:
+  chainlink-adapter:
+    container_name: chainlink-adapter
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    restart: always
+    ports:
+      - 8080:8080
+    command: start-dev
+
+networks:
+  default:
+    external:
+      name: link_default

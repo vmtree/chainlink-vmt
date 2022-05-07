@@ -1,0 +1,17 @@
+type = "cron"
+schemaVersion = 1
+name = ""
+maxTaskDuration = "0s"
+schedule = "@every 1m"
+observationSource = """
+    report [type="bridge" name="vmtbridge" requestData="{\\"jobRun\\": $(jobRun), \\"asdf\\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}"]
+    parse1 [type="jsonparse" path="data,proof" data="$(report)"]
+    parse2 [type="jsonparse" path="data,newFilledSubtrees" data="$(report)"]
+    encode [type="ethabiencode" abi="(uint256[8] proof, uint256[20] newFilledSubtrees)" data="{\\"proof\\": $(parse1), \\"newFilledSubtrees\\": $(parse2)}"]
+    submit [type="ethtx" to="0x118ee73ae47B9D52c93E991A9FB31B19Db9Fed46" data="$(encode)"]
+
+    report -> parse1 -> encode
+    report -> parse2 -> encode
+    
+    encode -> submit
+"""

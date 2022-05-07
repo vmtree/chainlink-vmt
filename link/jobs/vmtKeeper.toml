@@ -1,0 +1,43 @@
+type            = "cron"
+schemaVersion   = 1
+schedule        = "CRON_TZ=UTC */15 * * * * *" # every 15 seconds
+contractAddress = ""
+observationSource   = """
+    check_data [type="ethabiencode"
+                abi="(bytes4)"
+                data="0xaeaeaeae"]
+
+    check_call [type="ethcall"
+                failEarly=true
+                extractRevertReason=true
+                contract="$(jobSpec.contractAddress)"
+                data="$(check_data)"]
+
+    decode_call [type="ethabidecode"
+                 abi="(uint256[10] leaves, uint256[20] filledSubtrees)"
+                 data="$(check_call)"]
+
+    send_bridge [type="bridge"
+                 name="vmtbridge"
+                 requestData="{ \\"data\\": {\\"leaves\\": $(decode_call.leaves), \\"filledSubtrees\\": $(decode_call.filledSubtrees)} }"]
+
+    parse_proof [type="jsonparse"
+                 path="data,proof"
+                 data="$(send_bridge)"]
+
+    parse_trees [type="jsonparse"
+                 path="data,newFilledSubtrees"
+                 data="$(send_bridge)"]
+
+    encode_data [type="ethabiencode"
+                 abi="performMassUpdate(uint[8] memory proof, uint[20] memory newFilledSubtrees)"
+                 data="{ \\"proof\\": $(parse_proof), \\"newFilledSubtrees\\": $(parse_trees)}"]
+
+    submit_tree [type="ethtx"
+                 to="$(jobSpec.contractAddress)"
+                 data="$(encode_data)"]
+
+    check_data -> check_call -> decode_call -> send_bridge -> parse_proof -> encode_data
+    send_bridge -> parse_trees -> encode_data
+    encode_data -> submit_tree
+"""

@@ -1,0 +1,26 @@
+type = "cron"
+schemaVersion = 1
+name = "example cron job"
+maxTaskDuration = "0s"
+schedule = "CRON_TZ=UTC */5 * * * * *"
+observationSource = """
+    check_data [type="ethabiencode"
+                abi="(bytes4 checkSelector)"
+                data="{\\"checkSelector\\": \\"0x552fdb73\\" }"]
+
+    check_call [type="ethcall"
+                failEarly=true
+                extractRevertReason=true
+                contract="0xE89c65b3F066BE848f85651f5b561Fb72a2d01D0"
+                data="$(check_data)"]
+
+    eth_encode [type="ethabiencode"
+                abi="(bytes4)"
+                data="{\\"performSelector\\": \\"0xcde4efa9\\" }"]
+
+    eth_submit [type="ethtx"
+                to="0xE89c65b3F066BE848f85651f5b561Fb72a2d01D0" 
+                data="$(encode)"]
+
+    check_data -> check_call -> eth_encode -> eth_submit
+"""

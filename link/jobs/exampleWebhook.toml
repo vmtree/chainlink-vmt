@@ -1,0 +1,13 @@
+type = "webhook"
+schemaVersion = 1
+name = ""
+observationSource = """
+    encode [type="ethabiencode" abi="string message"
+            data="{ \\"message\\": \\"This is a message from a Chainlink node.\\"}"]
+
+    eth_tx [type="ethtx" to="0x118ee73ae47B9D52c93E991A9FB31B19Db9Fed46" data="$(encode)"]
+
+    report [type="bridge" name="vmtmassupdate" data="{\\"id\\": $(jobRun.id), \\"tx\\": $(eth_tx)}"]
+
+    encode -> eth_tx -> report
+"""

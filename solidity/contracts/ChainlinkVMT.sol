@@ -45,22 +45,6 @@ contract ChainlinkVMT is UpdateVerifier, MassUpdateVerifier {
         return filledSubtrees[19];
     }
 
-    function checkMassUpdate()
-        external
-        view
-        returns (uint[10] memory, uint[20] memory)
-    {
-        if ((latestIndex - nextIndex) < 10)
-            revert InsufficientInbox();
-        uint[10] memory leaves;
-        for (uint i; i < 10;) {
-            unchecked {
-                leaves[i] = commitments[nextIndex + i++];
-            }
-        }
-        return (leaves, filledSubtrees);
-    }
-
     function getFilledSubtrees() public view returns (uint[20] memory) {
         return filledSubtrees;
     }
@@ -69,39 +53,62 @@ contract ChainlinkVMT is UpdateVerifier, MassUpdateVerifier {
         uint i = latestIndex;
         if (i == TREE_CAPACITY)
             revert TreeIsFull();
-        commitments[latestIndex] = leaf;
-        unchecked { latestIndex++; }
-        return latestIndex;
+        commitments[i] = leaf;
+        unchecked { latestIndex = i + 1; }
+        emit LeafCommitted(leaf, i);
+        return i;
     }
 
-    function massUpdate(
+    function checkMassUpdate()
+        external
+        view
+        returns (uint[10] memory, uint[20] memory, uint)
+    {
+        uint next = nextIndex;
+        uint latest = latestIndex;
+        unchecked {
+            if ((latest - next) < 10)
+                revert InsufficientInbox();
+        }
+        uint[10] memory leaves;
+        for (uint i; i < 10;) {
+            unchecked {
+                leaves[i] = commitments[next + i];
+                i++;
+            }
+        }
+        return (leaves, filledSubtrees, next);
+    }
+
+    function performMassUpdate(
         uint[8] calldata proof,
         uint[20] calldata newSubtrees
     )
         public
         returns (uint finalIndex) 
     {
-        uint index = nextIndex;
-        if ((latestIndex - index) < 10)
-            revert InsufficientInbox();
+        uint next = nextIndex;
         unchecked {
-            finalIndex = index + 10;
+            if ((latestIndex - next) < 10)
+                revert InsufficientInbox();
+            finalIndex = next + 10;
         }
+
         uint[51] memory publicSignals;
-        publicSignals[0] = uint(index);
+        publicSignals[0] = uint(next);
 
         for (uint i; i < 10;) {
             unchecked { 
-                publicSignals[i + 1] = commitments[i + index];
-                commitments[i + index] = 0;
+                publicSignals[i + 1] = commitments[i + next];
+                delete commitments[i + next];
                 i++;
             }
         }
 
         for (uint i; i < 20;) {
             unchecked { 
-                publicSignals[i+11] = filledSubtrees[i];
-                publicSignals[i+31] = newSubtrees[i];
+                publicSignals[i + 11] = filledSubtrees[i];
+                publicSignals[i + 31] = newSubtrees[i];
                 i++; 
             }
         }
@@ -113,6 +120,9 @@ contract ChainlinkVMT is UpdateVerifier, MassUpdateVerifier {
             revert InvalidMassUpdateProof();
 
         for (uint i; i < 20;) {
+            // if (publicSignals[i+11] != newSubtrees[i]) {
+            //     filledSubtrees[i] = newSubtrees[i];
+            // }
             filledSubtrees[i] = newSubtrees[i];
             unchecked { i++; }
         }
@@ -126,19 +136,19 @@ contract ChainlinkVMT is UpdateVerifier, MassUpdateVerifier {
         public
         returns (uint finalIndex) 
     {
-        uint index = nextIndex;
-        if (index > latestIndex)
+        uint next = nextIndex;
+        if (next > latestIndex)
             revert InsufficientInbox();
         unchecked {
-            finalIndex = index + 1;
+            finalIndex = next + 1;
         }
         uint[42] memory publicSignals;
-        publicSignals[0] = uint(index);
-        publicSignals[1] = uint(commitments[index]);
-        commitments[index] = 0;
+        publicSignals[0] = uint(next);
+        publicSignals[1] = uint(commitments[next]);
+        commitments[next] = 0;
         for (uint i; i < 20;) {
-            publicSignals[i+2] = filledSubtrees[i];
-            publicSignals[i+22] = newSubtrees[i];
+            publicSignals[i + 2] = filledSubtrees[i];
+            publicSignals[i + 22] = newSubtrees[i];
             unchecked { i++; }
         }
 

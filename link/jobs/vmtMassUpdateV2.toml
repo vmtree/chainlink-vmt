@@ -1,0 +1,21 @@
+type            = "cron"
+schemaVersion   = 1
+schedule        = "CRON_TZ=UTC */15 * * * * *" # every 15 seconds
+contractAddress = ""
+observationSource   = """
+
+
+    parse_proof  [type="jsonparse" path="data,proof" data="$(jobRun.requestBody)"]
+
+    parse_newFilledSubtrees [type="jsonparse" path="data,newFilledSubtrees" data="$(jobRun.requestBody)"]
+
+    encode [type="ethabiencode"
+            abi="performMassUpdate(uint[8] memory proof, uint[20] memory newFilledSubtrees)"
+            data="{ \\"proof\\": $(parse_proof), \\"newFilledSubtrees\\": $(parse_newFilledSubtrees)}"]
+
+    eth_tx [type="ethtx" to="0x118ee73ae47B9D52c93E991A9FB31B19Db9Fed46" data="$(encode)"]
+
+    parse_proof -> encode
+    parse_newFilledSubtrees -> encode
+    encode -> eth_tx
+"""
