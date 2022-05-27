@@ -2,9 +2,11 @@
 
 ## Summary
 
-## Link to Video
+VMTrees use merkle trees combined with cryptographic proof for a variety of use cases such as anonymous airdrops, governance voting and privacy mixers.  Utilizing Chainlink's Decentralized Oracle Network, computation happens off chain which solves the problem of high gas fees.
 
-## Link to Demo Site
+[Chainlink Spring 2022 Hackathon Submission Video](https://www.youtube.com/watch?v=PPdBT0ACO04)
+
+[Link to VMTree Web Site](https://vmtree.vercel.app/)
 
 ## Table of Contents
 
@@ -22,6 +24,8 @@
 
 [Chainlink Node Repo](https://github.com/vmtree/chainlink-node)
 
+![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
+
 Brief description of architecture and diagram
 
 ## Front End
@@ -34,7 +38,7 @@ Brief description of architecture and diagram
 
 Describe VMT adapter and components, dependencies, etc. 
 
-## Contracts
+## Smart Contracts
 
 [Solidity Repo](https://github.com/vmtree/solidity)
 
