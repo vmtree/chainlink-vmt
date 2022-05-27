@@ -8,6 +8,7 @@ VMTrees use merkle trees combined with cryptographic proof for a variety of use 
 
 [Link to VMTree Web Site](https://vmtree.vercel.app/)
 
+
 ## Table of Contents
 
 - [Description](#description)
@@ -16,27 +17,32 @@ VMTrees use merkle trees combined with cryptographic proof for a variety of use 
 - [Software](#software)
 - [Contracts](#contracts)
 
+
 ## Description 
 
 (What the project is and what's the point of it)
 
+
 ## Architecture
 
-[Chainlink Node Repo](https://github.com/vmtree/chainlink-node)
+Architecture Diagram of VMTree components
 
 ![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
 
-Brief description of architecture and diagram
 
 ## Front End
 
-[Web Site Repo](https://github.com/vmtree/vmt-web)
+The web site front end was created with Next.js + Moralis + ChakraUI and is deployed using Vercel. 
+
+The site can be found [here](https://github.com/vmtree/vmt-web).
+
 
 ## Software
 
 [Adapter Repo](https://github.com/vmtree/adapter)
 
 Describe VMT adapter and components, dependencies, etc. 
+
 
 ## Smart Contracts
 
