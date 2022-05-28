@@ -29,7 +29,7 @@ Architecture Diagram of VMTree components
 
 ![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
 
-On chain solidity contracts call the VMT external adapter.
+On chain solidity contracts call the VMT external adapter via Chainlink's Decentralized Oracle Network.  
 
 
 ## Front End
