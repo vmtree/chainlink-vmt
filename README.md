@@ -23,13 +23,25 @@ VMTrees use merkle trees combined with cryptographic proof for a variety of use 
 (What the project is and what's the point of it)
 
 
-## Architecture
+## Proof of Concept
 
-Architecture Diagram of VMTree components
-
-![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
+### Architecture
 
 On chain solidity contracts call the VMT external adapter via Chainlink's Decentralized Oracle Network.  
+
+
+## Smart Contracts
+
+[Solidity Repo](https://github.com/vmtree/solidity)
+
+Describe contracts
+
+
+## External Adapter
+
+[Adapter Repo](https://github.com/vmtree/adapter)
+
+Describe VMT adapter and components, dependencies, etc. 
 
 
 ## Front End
@@ -41,15 +53,8 @@ The web site front end was created with Next.js + Moralis + ChakraUI and is depl
 [Link to Site Github Repo](https://github.com/vmtree/vmt-web).
 
 
-## Software
+## Back End
 
-[Adapter Repo](https://github.com/vmtree/adapter)
+Architecture of VMTree components
 
-Describe VMT adapter and components, dependencies, etc. 
-
-
-## Smart Contracts
-
-[Solidity Repo](https://github.com/vmtree/solidity)
-
-Describe contracts
+![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
