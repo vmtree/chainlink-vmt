@@ -1,10 +1,14 @@
+![VMTreeLogo](https://github.com/vmtree/adapter/blob/main/images/BlueWhite.jpg)
+
 # Verifiable Merkle Trees
+
+
 
 ## Summary
 
 VMTrees use merkle trees combined with cryptographic proof for a variety of use cases such as anonymous airdrops, governance voting and privacy mixers.  Utilizing Chainlink's Decentralized Oracle Network, computation happens off chain which solves the problem of high gas fees.
 
-[Chainlink Spring 2022 Hackathon Submission Video](https://www.youtube.com/watch?v=PPdBT0ACO04)
+[![Chainlink Spring 2022 Hackathon Submission Video](https://github.com/vmtree/adapter/blob/main/images/youtube.png)](https://www.youtube.com/watch?v=FZeOU83Ktj8)
 
 [Link to VMTree Web Site](https://vmtree.vercel.app/)
 
@@ -34,7 +38,9 @@ Architecture Diagram of VMTree components
 
 The web site front end was created with Next.js + Moralis + ChakraUI and is deployed using Vercel. 
 
-The site can be found [here](https://github.com/vmtree/vmt-web).
+[Link to VMTree Web Site](https://vmtree.vercel.app/)
+
+[Link to Site Github Repo](https://github.com/vmtree/vmt-web).
 
 
 ## Software
