@@ -1,8 +1,4 @@
-![VMTreeLogo](https://github.com/vmtree/adapter/blob/main/images/BlueWhite.jpg)
-
 # Verifiable Merkle Trees
-
-
 
 ## Summary
 
@@ -32,6 +28,8 @@ VMTrees use merkle trees combined with cryptographic proof for a variety of use 
 Architecture Diagram of VMTree components
 
 ![Diagram](https://github.com/vmtree/adapter/blob/main/images/diagram.png)
+
+On chain solidity contracts call the VMT external adapter.
 
 
 ## Front End
